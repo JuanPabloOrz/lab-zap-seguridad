@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h2>Hola, {{ user.name }} <small>({{ user.role }})</small></h2>
+  <p>Saldo: ${{ user.balance }} &middot; Correo: {{ user.email }}</p>
+</section>
+
+<section class="card">
+  <h3>Buscar facturas (XSS)</h3>
+  <form method="get" action="/search">
+    <input name="q" placeholder="Concepto"><button>Buscar</button>
+  </form>
+</section>
+
+<section class="card">
+  <h3>Transferir saldo (CSRF)</h3>
+  <form method="post" action="/transfer">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input name="to" placeholder="Usuario destino">
+    <input name="amount" placeholder="Monto">
+    <button>Transferir</button>
+  </form>
+</section>
+
+<section class="card">
+  <h3>API con JWT</h3>
+  <button id="btn-token">1. Obtener token</button>
+  <button id="btn-admin">2. Consultar /api/admin</button>
+  <pre id="out-jwt"></pre>
+</section>
+
+<section class="card">
+  <h3>Descargar imagen por URL (SSRF)</h3>
+  <input id="img-url" value="https://picsum.photos/200">
+  <button id="btn-img">Descargar</button>
+  <pre id="out-img"></pre>
+</section>
+
+<section class="card">
+  <h3>Ver factura (IDOR)</h3>
+  <input id="inv-id" value="1042"><button id="btn-inv">Ver</button>
+  <pre id="out-inv"></pre>
+</section>
+
+<section class="card">
+  <h3>Editar perfil (Mass Assignment)</h3>
+  <input id="p-name" value="{{ user.name }}">
+  <input id="p-email" value="{{ user.email }}">
+  <button id="btn-profile">Guardar</button>
+  <pre id="out-profile"></pre>
+</section>
+{% endblock %}

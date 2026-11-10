@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>CPO Lab Seguro</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <strong>CPO Lab Seguro</strong>
+    {% if session.user_id %}<a href="{{ url_for('logout') }}">Salir</a>{% endif %}
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
