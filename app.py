@@ -130,8 +130,8 @@ def login():
         username = request.form.get("username", "")
         password = request.form.get("password", "")
         user = get_db().execute(
-            f"SELECT * FROM users WHERE username = '{username}'").fetchone()
-        if user:
+            "SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+        if user and check_password_hash(user["password"], password):
             session.clear()
             session["user_id"] = user["id"]
             return redirect(url_for("dashboard"))
