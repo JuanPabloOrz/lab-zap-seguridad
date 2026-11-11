@@ -27,7 +27,7 @@ app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET", secrets.token_hex(32))
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 
 # [PARCHE 1 - JWT] Clave larga y aleatoria (no "secret" ni "123456")
-JWT_SECRET = "secret"
+JWT_SECRET = os.environ.get("JWT_SECRET", secrets.token_hex(32))
 JWT_ISSUER = "cpo-lab"
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "lab.db")
@@ -200,7 +200,11 @@ def decode_jwt():
     if not auth.startswith("Bearer "):
         abort(401, "Falta el token")
     try:
-        return jwt.decode(auth[7:], options={"verify_signature": False})
+        return jwt.decode(
+            auth[7:], JWT_SECRET,
+            algorithms=["HS256"],            # rechaza alg "none" y cualquier otro
+            issuer=JWT_ISSUER,
+            options={"require": ["exp", "iss", "sub"]})
     except jwt.PyJWTError as e:
         abort(401, f"Token invalido: {e}")
 
