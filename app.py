@@ -244,6 +244,9 @@ def is_safe_url(url):
 @login_required
 def fetch_image():
     url = (request.get_json(silent=True) or {}).get("url", "")
+    ok, reason = is_safe_url(url)
+    if not ok:
+        return jsonify(error=reason), 400
     try:
         r = requests.get(url, timeout=5, allow_redirects=False)
     except requests.RequestException:
