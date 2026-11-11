@@ -81,6 +81,9 @@ def init_db():
 @app.after_request
 def security_headers(resp):
     # [PARCHE 5 - XSS] CSP estricta: solo scripts propios, nada inline
+    resp.headers["Content-Security-Policy"] = (
+        "default-src 'self'; script-src 'self'; object-src 'none'; "
+        "base-uri 'self'; frame-ancestors 'none'")
     resp.headers["X-Content-Type-Options"] = "nosniff"
     resp.headers["X-Frame-Options"] = "DENY"
     return resp

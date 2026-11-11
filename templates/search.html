@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <section class="card">
-  <h2>Resultados para: {{ q|safe }}</h2>
+  <h2>Resultados para: {{ q }}</h2>
   <ul>
   {% for r in rows %}<li>#{{ r.id }} - {{ r.concept }} - ${{ r.amount }}</li>
   {% else %}<li>Sin resultados</li>{% endfor %}
