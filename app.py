@@ -24,6 +24,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET", secrets.token_hex(32))
 
 # [PARCHE 3 - CSRF] La cookie de sesion solo viaja en peticiones del mismo sitio
+app.config["SESSION_COOKIE_SAMESITE"] = "Strict"
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 
 # [PARCHE 1 - JWT] Clave larga y aleatoria (no "secret" ni "123456")
@@ -165,6 +166,7 @@ def search():
 @app.route("/transfer", methods=["POST"])
 @login_required
 def transfer():
+    check_csrf()
     to_user = request.form.get("to", "")
     try:
         amount = int(request.form.get("amount", "0"))
