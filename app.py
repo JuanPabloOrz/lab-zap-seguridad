@@ -276,13 +276,13 @@ def internal_metadata():
 @login_required
 def get_invoice(invoice_id):
     inv = get_db().execute("SELECT * FROM invoices WHERE id = ?", (invoice_id,)).fetchone()
-    if not inv:
+    if not inv or inv["owner_id"] != session["user_id"]:
         abort(404)
     return jsonify(dict(inv))
 
 
 # [PARCHE 6b - Mass Assignment] DTO allowlist: solo se aceptan name y email
-PROFILE_FIELDS = {"name", "email", "role", "balance"}
+PROFILE_FIELDS = {"name", "email"}
 
 
 @app.route("/api/users/profile", methods=["PUT"])
